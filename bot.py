@@ -61,7 +61,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"Привіт, {user_name}! Ваші дані збережено в таблиці.")
     except Exception as e:
         print(f"Помилка запису в Google Таблицю: {e}")
-        await update.message.reply_text("Сталася помилка під час запису в Google Таблицю.")
+        await update.message.reply_text("Сталася помилка під час запису в Google Таблицю.Облом")
 
 
 # Основна функція
