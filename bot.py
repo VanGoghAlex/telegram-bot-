@@ -11,13 +11,15 @@ def setup_google_sheets():
     # Визначаємо обсяг доступу
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 
-    # Завантажуємо облікові дані
-    creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+    # Завантажуємо облікові дані як словник зі змінної середовища
+    creds_json = os.getenv('GOOGLE_CREDENTIALS_JSON')
+    creds_dict = json.loads(creds_json)  # Парсимо JSON строку
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
     client = gspread.authorize(creds)
 
     # Відкриваємо таблицю за ID з посилання
-    spreadsheet_id = "15Cp8O9FMz4UMxAtGBllC0urHqDozrlzfHNueXc4V5oI"  # ID вашої таблиці
-    sheet = client.open_by_key(spreadsheet_id).worksheet("Telegram ID")  # Аркуш "Telegram ID"
+    spreadsheet_id = "15Cp8O9FMz4UMxAtGBllC0urHqDozrlzfHNueXc4V5oI"
+    sheet = client.open_by_key(spreadsheet_id).worksheet("Telegram ID")
     return sheet
 
 # Функція для запису даних
@@ -64,11 +66,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Основна функція
 def main():
     # Отримання токена із змінної середовища
-    TOKEN = "7618878733:AAEnOG6qUZTDAb3FuycNtbUmWlMnbi4Uafc"
+    token = os.getenv('TELEGRAM_TOKEN')
+    application = Application.builder().token(token).build()
 
-    application = Application.builder().token(TOKEN).build()
-
-    # Додайте обробник команди /start
+    # Додаємо обробник команди /start
     start_handler = CommandHandler('start', start)
     application.add_handler(start_handler)
 
