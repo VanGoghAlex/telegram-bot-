@@ -40,19 +40,13 @@ def webhook():
     return 'OK'
 
 def main():
-    global bot
-    global dispatcher
     token = os.getenv('TELEGRAM_TOKEN')
-    bot = Bot(token)
-    application = Application.builder(bot=bot).build()
+    application = Application.builder().token(token).build()
 
     # Додаємо обробник команди /start
     start_handler = CommandHandler('start', start)
     application.add_handler(start_handler)
-    
-    global dispatcher
-    dispatcher = application.dispatcher
-    
+
     webhook_url = 'https://telegram-bot-t1cy.onrender.com/webhook'
     application.bot.set_webhook(webhook_url)
 
